@@ -14,6 +14,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@clu
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run(){
+
     try{
         const serviceCollection = client.db('PhotographyReview').collection('services');
         const reviewCollection = client.db('PhotographyReview').collection('reviews');
@@ -31,6 +32,8 @@ async function run(){
             const service = await serviceCollection.findOne(query)
             res.send(service)
         })
+
+    
 
         app.get('/review',async(req,res)=>{
             // console.log(req.query.userEmail)
