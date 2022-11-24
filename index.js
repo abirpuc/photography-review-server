@@ -44,18 +44,53 @@ async function run(){
             res.send(result)
         })
 
+        app.get('/review/:id', async(req, res) =>{
+            const id = req.params.id;
+            const query = { _id:ObjectId(id) }
+            const result = await reviewCollection.findOne(query)
+            res.send(result)
+        })
+
+        app.patch('/review/:id', async(req,res) =>{
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)}
+            const review = req.body;
+            const option = {upsert:true};
+            const updatedReviewData = {
+                $set:{
+                    userName: review.userName,
+                    userEmail: review.userEmail,
+                    mobile: review.mobile,
+                    serviceName: review.serviceName,
+                    message: review.message
+                }
+            }
+            const result = await reviewCollection.updateOne(filter,updatedReviewData,option);
+            res.send(result)
+        })
+
+
         app.post('/services', async(req,res)=>{
             const service = req.body;
             const result = await serviceCollection.insertOne(service)
             res.send(service)
         })
 
+
         app.post('/review', async(req, res) =>{
             const review = req.body;
-            console.log(review);
             const result = await reviewCollection.insertOne(review)
             res.send(result)
         })
+
+
+        app.delete('/review/:id', async(req,res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)}
+            const result = await reviewCollection.deleteOne(query)
+            res.send(result)
+        })
+
     }
     finally{
 
